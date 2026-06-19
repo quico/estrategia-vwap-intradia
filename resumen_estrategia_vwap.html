@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estrategia de trading intradía — VWAP-reversion</title>
+<style>
+  :root{
+    --bg:#0f1419; --card:#1a2129; --ink:#e6edf3; --muted:#9fb0c0;
+    --accent:#4aa3ff; --green:#2ecc71; --amber:#f2c14e; --red:#e74c3c; --line:#2a3540;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:2.2rem 1rem 4rem; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; line-height:1.6;
+  }
+  .wrap{max-width:880px; margin:0 auto}
+  h1{font-size:1.9rem; margin:0 0 .2rem; letter-spacing:-.02em}
+  .sub{color:var(--muted); margin:0 0 1.6rem; font-size:1.02rem}
+  .pill{display:inline-block; padding:.18rem .6rem; border-radius:999px; font-size:.78rem;
+        font-weight:600; background:rgba(74,163,255,.15); color:var(--accent); border:1px solid rgba(74,163,255,.35)}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px;
+        padding:1.2rem 1.4rem; margin:1rem 0}
+  h2{font-size:1.18rem; margin:.1rem 0 .8rem; display:flex; align-items:center; gap:.5rem}
+  h2 .ico{font-size:1.2rem}
+  ul{margin:.3rem 0 .3rem; padding-left:1.2rem}
+  li{margin:.3rem 0}
+  .rule{display:grid; grid-template-columns:130px 1fr; gap:.5rem; padding:.35rem 0; border-bottom:1px dashed var(--line)}
+  .rule:last-child{border-bottom:none}
+  .rule b{color:var(--accent)}
+  table{width:100%; border-collapse:collapse; margin:.4rem 0}
+  th,td{text-align:left; padding:.5rem .6rem; border-bottom:1px solid var(--line); font-size:.95rem}
+  th{color:var(--muted); font-weight:600; font-size:.82rem; text-transform:uppercase; letter-spacing:.03em}
+  .ok{color:var(--green)} .wait{color:var(--amber)} .bad{color:var(--red)}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:1rem}
+  @media(max-width:620px){.grid2{grid-template-columns:1fr}}
+  .kpi{background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:10px; padding:.7rem .9rem}
+  .kpi .n{font-size:1.4rem; font-weight:700} .kpi .l{color:var(--muted); font-size:.8rem}
+  .warn{background:rgba(242,193,78,.08); border-left:3px solid var(--amber); padding:.8rem 1rem; border-radius:6px}
+  .one{background:linear-gradient(135deg,rgba(74,163,255,.12),rgba(46,204,113,.08));
+       border:1px solid rgba(74,163,255,.3); border-radius:14px; padding:1.2rem 1.4rem; font-size:1.05rem}
+  .muted{color:var(--muted)}
+  footer{color:var(--muted); font-size:.8rem; text-align:center; margin-top:2rem}
+  code{background:rgba(255,255,255,.07); padding:.1rem .35rem; border-radius:4px; font-size:.88em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <span class="pill">PAPER-TRADING EN MARCHA · sin dinero real</span>
+  <h1>Estrategia de trading intradía</h1>
+  <p class="sub">VWAP-reversion sobre micro-futuro del Nasdaq (MNQ)</p>
+
+  <div class="card">
+    <h2><span class="ico">🎯</span>Qué es y cómo funciona</h2>
+    <p>Reversión a la media <b>intradía</b>: cuando el precio se aleja demasiado de su valor
+    "justo" del día (el <b>VWAP</b>, precio medio ponderado por volumen), apuesta a que volverá.
+    Solo posiciones largas, una a la vez, y <b>siempre plana al cierre</b> (intradía puro).</p>
+    <div class="rule"><b>Entrada</b><span>el precio cae a <b>−2,5σ</b> por debajo del VWAP → compra</span></div>
+    <div class="rule"><b>Objetivo</b><span>el precio <b>vuelve al VWAP</b> → vende con beneficio</span></div>
+    <div class="rule"><b>Stop</b><span>baja <b>1σ más</b> (a −3,5σ) → corta la pérdida</span></div>
+    <div class="rule"><b>Cierre EOD</b><span>al final de la sesión se liquida sí o sí (nada overnight)</span></div>
+    <p class="muted" style="margin:.6rem 0 0; font-size:.86rem">σ = volatilidad del día medida sobre la marcha.</p>
+    <figure style="margin:1.1rem 0 0">
+      <img src="diagrama_vwap.png" alt="Diagrama de la estrategia VWAP-reversion: entrada a −2,5σ, objetivo en el VWAP, stop a −3,5σ y cierre EOD"
+           style="width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:10px">
+      <figcaption class="muted" style="margin:.5rem 0 0; font-size:.82rem; text-align:center">
+        Esquema ilustrativo (no datos reales): una operación ganadora (vuelve al VWAP) y una perdedora (salta el stop).</figcaption>
+    </figure>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">📈</span>Sobre qué instrumento</h2>
+    <ul>
+      <li><b>Se opera: MNQ</b> — Micro E-mini Nasdaq-100 (CME), futuro apalancado micro (2&nbsp;$/punto). Ideal para cuenta pequeña.</li>
+      <li><b>Se validó sobre: NQ</b> (el E-mini grande, mismo índice) por tener 16 años de histórico limpio. Mismos precios, solo cambia el tamaño.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🔬</span>Cómo se validó</h2>
+    <p>16 años de datos reales (Databento, 2010–2026). Método honesto: configuración elegida
+    <b>solo con 2010–2019</b> y medida en <b>2020–2026 intactos</b>.</p>
+    <div class="grid2">
+      <div class="kpi"><div class="n ok">7/7</div><div class="l">años out-of-sample positivos</div></div>
+      <div class="kpi"><div class="n">+0,19R</div><div class="l">expectancy por operación</div></div>
+      <div class="kpi"><div class="n">1,16</div><div class="l">profit factor</div></div>
+      <div class="kpi"><div class="n">1,27</div><div class="l">Sharpe diario</div></div>
+    </div>
+    <p class="muted" style="margin:.7rem 0 0; font-size:.88rem">Stress-test: aguanta hasta 4 ticks de slippage + comisiones altas sin perder el edge.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🤖</span>Qué pasa automáticamente</h2>
+    <ul>
+      <li>Una <b>tarea de Windows</b> (<code>PaperVWAP_MNQ</code>) ejecuta el sistema <b>cada 5&nbsp;min, L–V de 15:30 a 22:30</b> (hora española).</li>
+      <li>Baja las velas de hoy de IBKR, calcula VWAP y desviación, y comprueba si hay señal.</li>
+      <li>En cada <b>entrada o salida</b> te <b>avisa por WhatsApp</b> y lo <b>registra en el journal</b> (<code>paper_vwap_journal.csv</code>).</li>
+      <li>Todo es <b>PAPEL (simulado)</b>: no manda órdenes reales, no se mueve dinero.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🗓️</span>Sistema operativo · qué corre y cuándo</h2>
+    <p class="muted" style="margin:.1rem 0 .7rem; font-size:.9rem">
+      Todo son tareas programadas de Windows que se ejecutan solas. Instrumento operado:
+      <b>MNQ · front-month</b> — el script resuelve automáticamente el contrato vigente (rota solo en cada vencimiento).</p>
+    <table>
+      <tr><th>Tarea</th><th>Cuándo</th><th>Qué hace</th></tr>
+      <tr><td><code>PaperVWAP_MNQ</code></td><td>L–V, cada 5&nbsp;min<br>15:30–22:30</td><td>Ejecuta la señal sobre MNQ; avisa por WhatsApp en entradas/salidas</td></tr>
+      <tr><td><code>PaperResumen_VWAP</code></td><td>L–V, 22:15</td><td>Resumen del día (métricas + curva equity) → Telegram + WhatsApp</td></tr>
+      <tr><td><code>BridgeWatchdog</code></td><td>cada 15&nbsp;min</td><td>Revive el bridge de WhatsApp si cae; avisa por Telegram si TWS cae en mercado</td></tr>
+      <tr><td><code>BridgeRestart_Daily</code></td><td>06:00</td><td>Reinicio preventivo del bridge (evita el cuelgue "500")</td></tr>
+      <tr><td>TWS Auto-Restart</td><td>05:00</td><td>TWS se reinicia manteniendo la sesión (sin re-login)</td></tr>
+      <tr><td><code>Trading-Alertas</code> / <code>Resumen</code></td><td>9 / 12 / 18 h</td><td>Cartera DCA: alertas ±2% y resumen diario (Telegram + WhatsApp)</td></tr>
+    </table>
+    <p class="muted" style="margin:.7rem 0 0; font-size:.86rem">
+      Avisos de operación: solo <b>entrada</b> y <b>salida</b> (MANTENER y "sin señal" son silenciosos, no hay spam).</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🙋</span>Qué tienes que hacer tú</h2>
+    <ul>
+      <li><b>Tener TWS abierto</b> con sesión iniciada y la API en el puerto 7496. El auto-restart de las 05:00 se encarga del mantenimiento diario.</li>
+      <li><b>Revisar los domingos por la noche</b> que TWS sigue logueado — el reseteo semanal de IBKR puede pedir <b>2FA</b> en el móvil (lo único que no se automatiza).</li>
+      <li><b>Leer los avisos</b> (WhatsApp en operaciones · resumen a las 22:15). Para ver el detalle: <code>paper.bat resumen</code>.</li>
+      <li><b>Nada de dinero</b> — sigue en validación en papel.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">🗺️</span>En qué fase estamos</h2>
+    <table>
+      <tr><th>Fase</th><th>Estado</th></tr>
+      <tr><td>Validar el edge histórico (7/7 años)</td><td class="ok">✅ hecho</td></tr>
+      <tr><td>Robustez a costes / slippage</td><td class="ok">✅ hecho</td></tr>
+      <tr><td>Paper-trading en vivo</td><td class="wait">🔄 en marcha ahora</td></tr>
+      <tr><td>Confirmar fill-realism (¿se llenan las órdenes?)</td><td class="wait">⏳ solo el papel lo dirá</td></tr>
+      <tr><td>Fondear cuenta y pasar a real (~8–15k$)</td><td class="wait">⏳ pendiente</td></tr>
+      <tr><td>Auto-ejecución vía IBKR (paper 7497 primero)</td><td class="wait">⏳ fase final</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="ico">⚠️</span>Avisos honestos</h2>
+    <div class="warn">
+      <ul style="margin:0">
+        <li><b>Edge fino:</b> profit factor 1,16. Real pero modesto — no te hará rico rápido.</li>
+        <li><b>Win rate ~35%:</b> aciertas 1 de cada 3 veces; ganas porque los aciertos son mayores que los fallos. Duro psicológicamente (por eso es automático).</li>
+        <li><b>Drawdowns:</b> con 1 MNQ el peor bajón histórico fue <b>−4.580&nbsp;$</b>. Por eso 2.000&nbsp;€ es insuficiente; suelo ~8.000&nbsp;$, ideal 12–15k.</li>
+        <li><b>Lo que el backtest no sabe:</b> si tus órdenes se llenan de verdad en vivo. Eso es lo que el paper-trading mide ahora.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="one">
+    <b>En una frase:</b> un robot en papel compra micro-Nasdaq (MNQ) cuando se desploma respecto
+    a su media del día y lo vende al recuperar, avisándote por WhatsApp; tú solo tienes que tener
+    TWS abierto y observar, sin arriesgar dinero, hasta que el papel confirme que funciona en vivo.
+  </div>
+
+  <footer>Generado el 2026-06-13 · actualizado 2026-06-19 · Proyecto Finanzas Personales · uso informativo, no es asesoramiento financiero</footer>
+</div>
+</body>
+</html>
