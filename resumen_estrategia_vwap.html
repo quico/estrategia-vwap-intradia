@@ -130,6 +130,42 @@
   </div>
 
   <div class="card">
+    <h2><span class="ico">🏁</span>Por qué esta y no otra</h2>
+    <p>No se probó una sola idea: se enfrentaron <b>cuatro familias</b> de estrategias intradía, cada
+    una con su propia rejilla de variantes. En todas se aplicó el mismo método — variante elegida
+    <b>solo con 2010–2019</b>, resultado medido en <b>2020–2026 intactos</b>, con 1 MNQ.</p>
+    <div style="overflow-x:auto">
+    <table>
+      <tr><th>Familia</th><th>Ops</th><th>P&amp;L 2020-26</th><th>PF</th><th>Peor bajón</th><th>Años+</th></tr>
+      <tr style="background:rgba(74,163,255,.07)">
+        <td><b>VWAP-reversion</b><br><span class="muted" style="font-size:.82em">entrada −2,0σ ← elegida</span></td>
+        <td>2.908</td><td class="ok">+25.816&nbsp;$</td><td>1,23</td><td>−3.058&nbsp;$</td><td class="ok">7/7</td></tr>
+      <tr><td>ORB <span class="muted" style="font-size:.82em">rotura de la apertura (30&nbsp;min)</span></td>
+        <td>1.214</td><td class="ok">+15.223&nbsp;$</td><td>1,14</td><td>−4.762&nbsp;$</td><td class="wait">6/7</td></tr>
+      <tr><td>Gap-and-go <span class="muted" style="font-size:.82em">hueco de apertura ≥0,3%</span></td>
+        <td>696</td><td class="ok">+10.210&nbsp;$</td><td>1,16</td><td>−3.883&nbsp;$</td><td class="wait">6/7</td></tr>
+      <tr><td>CRT <span class="muted" style="font-size:.82em">rango de la vela previa</span></td>
+        <td>573</td><td class="bad">−3.265&nbsp;$</td><td>0,90</td><td>−4.869&nbsp;$</td><td class="bad">3/7</td></tr>
+    </table>
+    </div>
+    <ul style="margin-top:.8rem">
+      <li><b>VWAP-reversion no gana por beneficio por operación</b> —ahí ORB y Gap-and-go sacan más—,
+      gana por <b>consistencia</b>: es la única sin ningún año perdedor (el peor, 2022, aún dio
+      +310&nbsp;$) y la de menor drawdown. ORB y Gap-and-go tienen cada una su año malo
+      (ORB −920&nbsp;$ en 2020, Gap-and-go −2.155&nbsp;$ en 2025) y bajones un 25-55&nbsp;% más profundos.</li>
+      <li><b>Y gana por evidencia</b>: 2.908 operaciones fuera de muestra frente a 696 o 573. Con un
+      edge fino, las familias que operan poco no tienen muestra suficiente para distinguirlo de cero.</li>
+      <li><b>CRT queda descartada</b>: pierde dinero fuera de muestra (PF 0,90) pese a haber sido
+      rentable en el periodo con el que se eligió. Es el ejemplo de por qué el split importa.</li>
+    </ul>
+    <p class="muted" style="margin:.7rem 0 0; font-size:.82rem">
+      Las cuatro familias <b>cambian de variante ganadora</b> según se puntúe en R o en dinero. El caso
+      extremo es CRT: su "mejor" variante por expectancy en R da <b>+0,011R pero −4.357&nbsp;$</b>. Ese es
+      el mismo defecto que obligó a cambiar la entrada de −2,5σ a −2,0σ, y por eso ahora todo se puntúa
+      y se cuenta en dólares.</p>
+  </div>
+
+  <div class="card">
     <h2><span class="ico">🧪</span>Paper-trading: contador a cero</h2>
     <div class="warn" style="margin:.2rem 0 1rem">
       <b>El cambio de configuración del 26-jul-2026 reinicia el paper-trading.</b>
@@ -244,7 +280,7 @@
     TWS abierto y observar, sin arriesgar dinero, hasta que el papel confirme que funciona en vivo.
   </div>
 
-  <footer>Generado el 2026-06-13 · actualizado 2026-07-26: entrada cambiada de −2,5σ a <b>−2,0σ</b> (la anterior estaba dominada) · 7/7 años positivos en dinero · suelo de capital ~8.000&nbsp;$ · paper-trading reiniciado · Proyecto Finanzas Personales · uso informativo, no es asesoramiento financiero</footer>
+  <footer>Generado el 2026-06-13 · actualizado 2026-07-26: entrada cambiada de −2,5σ a <b>−2,0σ</b> (la anterior estaba dominada) · 7/7 años positivos en dinero · comparativa de las 4 familias finalistas · suelo de capital ~8.000&nbsp;$ · paper-trading reiniciado · Proyecto Finanzas Personales · uso informativo, no es asesoramiento financiero</footer>
 </div>
 </body>
 </html>
