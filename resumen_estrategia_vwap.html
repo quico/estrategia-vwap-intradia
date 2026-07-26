@@ -47,7 +47,7 @@
 <body>
 <div class="wrap">
 
-  <span class="pill">PAPER-TRADING EN MARCHA · sin dinero real</span>
+  <span class="pill">PAPER-TRADING REINICIADO EL 26-JUL-2026 · sin dinero real</span>
   <h1>Estrategia de trading intradía</h1>
   <p class="sub">VWAP-reversion sobre micro-futuro del Nasdaq (MNQ)</p>
 
@@ -56,13 +56,13 @@
     <p>Reversión a la media <b>intradía</b>: cuando el precio se aleja demasiado de su valor
     "justo" del día (el <b>VWAP</b>, precio medio ponderado por volumen), apuesta a que volverá.
     Solo posiciones largas, una a la vez, y <b>siempre plana al cierre</b> (intradía puro).</p>
-    <div class="rule"><b>Entrada</b><span>el precio cae a <b>−2,5σ</b> por debajo del VWAP → compra</span></div>
+    <div class="rule"><b>Entrada</b><span>el precio cae a <b>−2,0σ</b> por debajo del VWAP → compra</span></div>
     <div class="rule"><b>Objetivo</b><span>el precio <b>vuelve al VWAP</b> → vende con beneficio</span></div>
-    <div class="rule"><b>Stop</b><span>baja <b>1σ más</b> (a −3,5σ) → corta la pérdida</span></div>
+    <div class="rule"><b>Stop</b><span>baja <b>1σ más</b> (a −3,0σ) → corta la pérdida</span></div>
     <div class="rule"><b>Cierre EOD</b><span>al final de la sesión se liquida sí o sí (nada overnight)</span></div>
     <p class="muted" style="margin:.6rem 0 0; font-size:.86rem">σ = volatilidad del día medida sobre la marcha.</p>
     <figure style="margin:1.1rem 0 0">
-      <img src="diagrama_vwap.png" alt="Diagrama de la estrategia VWAP-reversion: entrada a −2,5σ, objetivo en el VWAP, stop a −3,5σ y cierre EOD"
+      <img src="diagrama_vwap.png" alt="Diagrama de la estrategia VWAP-reversion: entrada a −2,0σ, objetivo en el VWAP, stop a −3,0σ y cierre EOD"
            style="width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:10px">
       <figcaption class="muted" style="margin:.5rem 0 0; font-size:.82rem; text-align:center">
         Esquema ilustrativo (no datos reales): una operación ganadora (vuelve al VWAP) y una perdedora (salta el stop).</figcaption>
@@ -82,80 +82,90 @@
     <p>16 años de datos reales (Databento, 2010–2026). Método honesto: configuración elegida
     <b>solo con 2010–2019</b> y medida en <b>2020–2026 intactos</b>.</p>
     <div class="grid2">
-      <div class="kpi"><div class="n ok">6/7</div><div class="l">años out-of-sample positivos <span style="font-size:.9em">en dinero</span></div></div>
-      <div class="kpi"><div class="n">+0,184R</div><div class="l">expectancy por operación</div></div>
-      <div class="kpi"><div class="n">1,15</div><div class="l">profit factor</div></div>
-      <div class="kpi"><div class="n">1,27</div><div class="l">Sharpe diario <span style="font-size:.9em">(comisión real 0,52&nbsp;$/lado)</span></div></div>
+      <div class="kpi"><div class="n ok">7/7</div><div class="l">años out-of-sample positivos <span style="font-size:.9em">en dinero</span></div></div>
+      <div class="kpi"><div class="n">+0,216R</div><div class="l">expectancy por operación</div></div>
+      <div class="kpi"><div class="n">1,23</div><div class="l">profit factor</div></div>
+      <div class="kpi"><div class="n">2,08</div><div class="l">Sharpe diario <span style="font-size:.9em">(comisión real 0,52&nbsp;$/lado)</span></div></div>
     </div>
-    <p class="muted" style="margin:.7rem 0 0; font-size:.88rem">1.911 operaciones out-of-sample · 35% de aciertos · stress-test: aguanta hasta 4 ticks de slippage + comisiones altas sin perder el edge.</p>
+    <p class="muted" style="margin:.7rem 0 0; font-size:.88rem">2.908 operaciones out-of-sample · 38% de aciertos · +25.816&nbsp;$ con 1 MNQ · stress-test: rentable en los 15 puntos de la rejilla de costes (0-4 ticks de slippage × comisión 0,35/0,52/0,75&nbsp;$); incluso a 4 ticks mantiene PF 1,14.</p>
+    <p class="muted" style="margin:.4rem 0 0; font-size:.88rem">El in-sample (+0,168R) es <b>peor</b> que el out-of-sample (+0,216R), que es la señal que uno quiere ver: no hay indicio de sobreajuste.</p>
 
     <p style="margin:1rem 0 .3rem"><b>Año a año, con 1 MNQ:</b></p>
     <table>
-      <tr><th>Año</th><th>Expectancy</th><th>P&amp;L</th><th>Ops</th></tr>
-      <tr><td>2020</td><td>+0,089 R</td><td class="ok">+1.392 $</td><td>285</td></tr>
-      <tr><td>2021</td><td>+0,194 R</td><td class="ok">+2.484 $</td><td>290</td></tr>
-      <tr><td>2022</td><td>+0,054 R</td><td class="bad">−1.028 $</td><td>359</td></tr>
-      <tr><td>2023</td><td>+0,342 R</td><td class="ok">+3.042 $</td><td>260</td></tr>
-      <tr><td>2024</td><td>+0,163 R</td><td class="ok">+1.460 $</td><td>315</td></tr>
-      <tr><td>2025</td><td>+0,291 R</td><td class="ok">+2.924 $</td><td>289</td></tr>
-      <tr><td>2026</td><td>+0,224 R</td><td class="ok">+1.899 $</td><td>113</td></tr>
+      <tr><th>Año</th><th>P&amp;L</th><th>Ops</th></tr>
+      <tr><td>2020</td><td class="ok">+4.694 $</td><td>463</td></tr>
+      <tr><td>2021</td><td class="ok">+2.543 $</td><td>434</td></tr>
+      <tr><td>2022</td><td class="ok">+310 $</td><td>502</td></tr>
+      <tr><td>2023</td><td class="ok">+4.070 $</td><td>429</td></tr>
+      <tr><td>2024</td><td class="ok">+4.908 $</td><td>468</td></tr>
+      <tr><td>2025</td><td class="ok">+7.387 $</td><td>442</td></tr>
+      <tr><td>2026</td><td class="ok">+1.905 $</td><td>170</td></tr>
     </table>
 
     <div class="warn" style="margin-top:.9rem">
-      <b>Corrección importante (26-jul-2026):</b> antes se publicaba aquí "<b>7/7 años positivos</b>".
-      Es cierto <b>en expectancy R</b> —los siete años dan R medio positivo— pero <b>no en dinero</b>:
-      <b>2022 perdió 1.028&nbsp;$</b> con 1 MNQ pese a un R medio de +0,054. Motivo: R normaliza cada
-      operación por su propio riesgo, y en un año de volatilidad alta los perdedores arriesgan más
-      dólares que los ganadores, así que un R medio positivo puede perder dinero. En dinero son
-      <b>6/7</b>. El script de validación puntuaba por expectancy R y de ahí salió el titular.
+      <b>Se cambió la configuración el 26-jul-2026, y el motivo importa.</b>
+      Hasta esa fecha se entraba a <b>−2,5σ</b>, una configuración elegida por su <b>expectancy en R</b>
+      (beneficio medio dividido por el riesgo de cada operación). Ese criterio tiene un defecto lógico:
+      R normaliza cada operación por su propio riesgo, así que en un año de volatilidad alta los
+      perdedores arriesgan más dólares que los ganadores y <b>un R medio positivo puede perder dinero</b>.
+      Pasó de verdad: con −2,5σ, <b>2022 perdió 1.028&nbsp;$</b> pese a un R medio de +0,054.
+      <ul style="margin:.6rem 0 0">
+        <li>Al reevaluar la misma rejilla <b>puntuando en dinero</b>, la configuración que estaba en
+        marcha resultó ser la <b>peor de las tres</b> — no un compromiso riesgo/beneficio, sino dominada:
+        <b>menos beneficio y más drawdown</b>.</li>
+        <li>−2,5σ daba +12.173&nbsp;$ con un drawdown de −41,98&nbsp;R y 6/7 años positivos.
+        <b>−2,0σ da +25.816&nbsp;$ con −25,31&nbsp;R y 7/7</b>, y gana en los siete años por separado.</li>
+        <li>Efecto práctico: el <b>capital mínimo baja de ~14.000&nbsp;$ a ~8.000&nbsp;$</b>, porque el
+        drawdown esperado es mucho menor.</li>
+      </ul>
     </div>
-    <p class="muted" style="margin:.7rem 0 0; font-size:.82rem">Las cifras de esta sección se
-      <b>reverificaron el 25-jul-2026</b> reejecutando la validación completa (antes se publicaba
-      +0,194R / PF&nbsp;1,16, error de transcripción) y el desglose anual en dinero se añadió el
-      <b>26-jul-2026</b>. El edge sigue siendo real pero es fino: <b>σ&nbsp;=&nbsp;1,68R</b> por operación
-      sobre un edge de 0,184R, así que harían falta <b>~323 operaciones</b> para distinguirlo de cero
-      al 95&nbsp;% de confianza.</p>
+    <p class="muted" style="margin:.7rem 0 0; font-size:.82rem">
+      <b>No se eligió −1,5σ</b>, que daba aún más dinero (+34.710&nbsp;$): está en el <b>borde</b> del
+      rango probado, así que no se sabe si es el óptimo o solo el extremo, su drawdown en R es peor
+      (−31,78) y lo premia un criterio que favorece estructuralmente operar más. Elegirla por su
+      resultado fuera de muestra habría sido <i>data snooping</i>.
+      El edge sigue siendo real pero fino: <b>σ&nbsp;=&nbsp;1,62R</b> por operación sobre un edge de
+      0,216R, así que harían falta <b>~215 operaciones</b> para distinguirlo de cero al 95&nbsp;% de
+      confianza. Cifras reverificadas reejecutando la validación completa.</p>
   </div>
 
   <div class="card">
-    <h2><span class="ico">🧪</span>Resultados en vivo (papel)</h2>
-    <p class="muted" style="margin:.1rem 0 .8rem; font-size:.9rem">
-      Primeras <b>6 semanas</b> de paper-trading · 15-jun → 24-jul&nbsp;2026 · 30 sesiones de mercado ·
-      dinero simulado, 1 contrato MNQ. <span class="muted">Datos a 25-jul-2026.</span></p>
-    <div class="grid2">
-      <div class="kpi"><div class="n ok">+1.766&nbsp;$</div><div class="l">P&amp;L acumulado (1 MNQ)</div></div>
-      <div class="kpi"><div class="n">23</div><div class="l">operaciones en 11 sesiones</div></div>
-      <div class="kpi"><div class="n">9/11</div><div class="l">sesiones con operaciones en verde</div></div>
-      <div class="kpi"><div class="n">−390&nbsp;$</div><div class="l">peor bajón hasta ahora</div></div>
+    <h2><span class="ico">🧪</span>Paper-trading: contador a cero</h2>
+    <div class="warn" style="margin:.2rem 0 1rem">
+      <b>El cambio de configuración del 26-jul-2026 reinicia el paper-trading.</b>
+      Las <b>23 operaciones</b> acumuladas entre el 15-jun y el 24-jul se hicieron con la
+      configuración antigua (−2,5σ) y <b>no son evidencia</b> de que la nueva se ejecute bien en vivo.
+      Quedan archivadas como histórico, pero el contador vuelve a <b>0 operaciones</b>.
     </div>
 
-    <table style="margin-top:1rem">
-      <tr><th>Métrica</th><th>Papel (23 ops)</th><th>Backtest (1.911 ops)</th></tr>
-      <tr><td>Win rate</td><td class="ok">47,8 %</td><td>35,0 %</td></tr>
-      <tr><td>Expectancy por operación</td><td class="ok">+0,61 R</td><td>+0,184 R</td></tr>
-      <tr><td>Profit factor</td><td class="ok">2,04</td><td>1,15</td></tr>
-      <tr><td>Drawdown máximo</td><td>−390 $</td><td>−4.507 $ <span class="muted">(−41,98 R)</span></td></tr>
-    </table>
-
-    <p style="margin:.9rem 0 .3rem"><b>Qué funciona ya:</b></p>
+    <p style="margin:.2rem 0 .3rem"><b>Qué dejó demostrado la fase anterior</b> —esto sí se conserva,
+      porque es sobre la <i>fontanería</i>, no sobre la configuración:</p>
     <ul style="margin-top:.2rem">
-      <li>La <b>infraestructura</b>: 30 de 30 días operativos ejecutados, 85 comprobaciones diarias. Solo se perdió una sesión entera (18-jun, con TWS cerrado).</li>
-      <li>Los <b>stops</b> se cierran donde deben: los 12 stops han salido todos entre −1,00R y −1,01R, sin pérdidas fantasma.</li>
-      <li>Las <b>salidas por objetivo</b> (vuelta al VWAP) aportan +2.548&nbsp;$; los cierres de fin de sesión, +911&nbsp;$.</li>
+      <li>La <b>infraestructura funciona</b>: 30 de 30 días operativos ejecutados, ~85 comprobaciones
+      diarias. Solo se perdió una sesión entera (18-jun, con TWS cerrado).</li>
+      <li>Los <b>stops se cierran donde deben</b>: los 12 stops salieron todos entre −1,00R y −1,01R,
+      sin pérdidas fantasma. Ese era el punto crítico y quedó resuelto.</li>
+      <li>Se vio el <b>patrón de riesgo real</b>: el 15-jul encadenó <b>3 stops seguidos</b> antes de
+      acertar el cuarto. En un día de caída sostenida, una estrategia de reversión solo-largos come
+      stops en cadena.</li>
     </ul>
 
-    <div class="warn" style="margin-top:1rem">
-      <b>Va por encima de lo esperado, y eso todavía no significa nada.</b>
-      <ul style="margin:.5rem 0 0">
-        <li><b>23 operaciones no validan nada.</b> El backtest necesitó 1.911 para afirmar algo. Ir mejor que la expectativa con esta muestra es suerte, no confirmación.</li>
-        <li><b>Una sola operación aporta el 37 % del beneficio</b> (+655&nbsp;$ el 17-jun). Sin ella quedan +1.111&nbsp;$ y la expectancy cae de +0,61R a <b>+0,34R</b>.</li>
-        <li><b>El mal tramo aún no ha llegado:</b> −390&nbsp;$ de bajón frente a los −4.507&nbsp;$ que da el histórico —y frente a los ~−6.300&nbsp;$ que costaría ese mismo bajón al riesgo por operación de hoy (ver abajo). El sistema no ha sido puesto a prueba de verdad.</li>
-        <li><b>Sí se ha visto el patrón de riesgo:</b> el 15-jul encadenó <b>3 stops seguidos</b> antes de acertar el cuarto. En un día de caída sostenida, una estrategia de reversión solo-largos come stops en cadena.</li>
-      </ul>
-    </div>
-    <p class="muted" style="margin:.7rem 0 0; font-size:.86rem">
-      Conclusión: la mecánica funciona y los números no contradicen el backtest, pero falta muestra.
-      El plan sigue igual — dejarlo correr hasta 30-50 operaciones antes de plantearse fondear.</p>
+    <p style="margin:.9rem 0 .3rem"><b>Y qué no demostró:</b></p>
+    <ul style="margin-top:.2rem">
+      <li>El resultado (+1.766&nbsp;$, +0,61R en 23 ops) iba <b>muy por encima</b> de la expectativa del
+      backtest. Con esa muestra eso es <b>suerte, no confirmación</b>: una sola operación aportaba el
+      37&nbsp;% del beneficio.</li>
+      <li>El <b>mal tramo no llegó</b>: −390&nbsp;$ de bajón frente a los miles que da el histórico.
+      El sistema nunca fue puesto a prueba de verdad.</li>
+    </ul>
+
+    <p class="muted" style="margin:.9rem 0 0; font-size:.86rem">
+      Como comprobación, se replicó la configuración nueva sobre esas mismas 28 sesiones con velas
+      descargadas a posteriori: da +1.569&nbsp;$ frente a los +1.484&nbsp;$ de la antigua sobre el mismo
+      tramo. Pero la diferencia entre ambas <b>no es estadísticamente distinguible</b> con tan pocas
+      operaciones (t&nbsp;=&nbsp;0,48), y sobre todo <b>eso es un backtest, no paper-trading</b>: no se
+      envió ninguna orden, así que no dice nada sobre si las órdenes se llenan en vivo. Por eso el
+      contador empieza de cero y no se hereda nada.</p>
   </div>
 
   <div class="card">
@@ -200,11 +210,12 @@
     <h2><span class="ico">🗺️</span>En qué fase estamos</h2>
     <table>
       <tr><th>Fase</th><th>Estado</th></tr>
-      <tr><td>Validar el edge histórico (6/7 años en dinero)</td><td class="ok">✅ hecho</td></tr>
+      <tr><td>Validar el edge histórico (7/7 años en dinero)</td><td class="ok">✅ hecho</td></tr>
       <tr><td>Robustez a costes / slippage</td><td class="ok">✅ hecho</td></tr>
-      <tr><td>Paper-trading en vivo</td><td class="wait">🔄 en marcha · 6 semanas, 23 ops</td></tr>
+      <tr><td>Infraestructura y fills sin pérdidas fantasma</td><td class="ok">✅ hecho <span class="muted">(fase −2,5σ)</span></td></tr>
+      <tr><td>Paper-trading en vivo con la config nueva</td><td class="wait">🔄 desde cero · 0 ops</td></tr>
       <tr><td>Confirmar fill-realism (¿se llenan las órdenes?)</td><td class="wait">⏳ solo el papel lo dirá</td></tr>
-      <tr><td>Fondear cuenta y pasar a real (<b>12–15k$</b>, revisado al alza)</td><td class="wait">⏳ pendiente</td></tr>
+      <tr><td>Fondear cuenta y pasar a real (<b>~8.000&nbsp;$</b>)</td><td class="wait">⏳ pendiente</td></tr>
       <tr><td>Auto-ejecución vía IBKR (paper 7497 primero)</td><td class="wait">⏳ fase final</td></tr>
     </table>
   </div>
@@ -213,16 +224,16 @@
     <h2><span class="ico">⚠️</span>Avisos honestos</h2>
     <div class="warn">
       <ul style="margin:0">
-        <li><b>Edge fino:</b> profit factor 1,15. Real pero modesto — no te hará rico rápido.</li>
-        <li><b>Win rate ~35%:</b> aciertas 1 de cada 3 veces; ganas porque los aciertos son mayores que los fallos. Duro psicológicamente (por eso es automático).</li>
-        <li><b>Drawdowns, y el suelo de capital recalculado:</b> con 1 MNQ el peor bajón histórico fue
-          <b>−4.507&nbsp;$</b>, que en unidades de riesgo son <b>−41,98&nbsp;R</b>. Pero el riesgo por
-          operación en dólares se ha <b>duplicado</b> con el Nasdaq en 29.000: 50–74&nbsp;$/op en
-          2021-2024 del backtest, 117&nbsp;$ en 2026 y <b>151&nbsp;$ en el paper actual</b>. Ese mismo
-          bajón de −42&nbsp;R al riesgo de hoy son <b>≈ −6.300&nbsp;$</b>. Sobre una cuenta de 8.000&nbsp;$
-          eso es un −79&nbsp;%, así que <b>el suelo realista ya no son 8.000&nbsp;$ sino 12–15k$</b> — y no
-          se puede bajar el tamaño, porque 1&nbsp;MNQ ya es el mínimo negociable.</li>
-        <li><b>Lo que el backtest no sabe:</b> si tus órdenes se llenan de verdad en vivo. Eso es lo que el paper-trading mide ahora.</li>
+        <li><b>Edge fino:</b> profit factor 1,23. Real pero modesto — no te hará rico rápido.</li>
+        <li><b>Win rate ~38%:</b> fallas más veces de las que aciertas; ganas porque los aciertos son mayores que los fallos. Duro psicológicamente (por eso es automático).</li>
+        <li><b>Drawdowns y suelo de capital:</b> con 1 MNQ el peor bajón histórico fue de
+          <b>−25,31&nbsp;R</b> (−3.058&nbsp;$ a los precios del periodo medido). La medida en <b>R</b> es la
+          que importa, porque el riesgo por operación en dólares <b>se ha duplicado</b> con el Nasdaq en
+          29.000: de 50–74&nbsp;$/op en 2021-2024 a ~110&nbsp;$/op en 2026. Ese mismo bajón al riesgo de hoy
+          son <b>≈ −2.800&nbsp;$</b>, y de ahí sale el suelo de <b>~8.000&nbsp;$</b> (para que el peor bajón
+          sea ~1/3 de la cuenta). No se puede bajar el tamaño: 1&nbsp;MNQ ya es el mínimo negociable.</li>
+        <li><b>Lo que el backtest no sabe:</b> si tus órdenes se llenan de verdad en vivo. Eso es lo que el paper-trading tiene que medir, y con la configuración nueva <b>está por medir</b>.</li>
+        <li><b>Se ha cambiado de configuración una vez.</b> Cada cambio reinicia la validación en vivo y consume una mirada más a los mismos datos históricos. No es gratis, y no debería repetirse sin un motivo tan claro como el de esta vez.</li>
       </ul>
     </div>
   </div>
@@ -233,7 +244,7 @@
     TWS abierto y observar, sin arriesgar dinero, hasta que el papel confirme que funciona en vivo.
   </div>
 
-  <footer>Generado el 2026-06-13 · actualizado 2026-07-26 (desglose anual en dinero: 6/7 años, no 7/7 · suelo de capital revisado a 12–15k$) · Proyecto Finanzas Personales · uso informativo, no es asesoramiento financiero</footer>
+  <footer>Generado el 2026-06-13 · actualizado 2026-07-26: entrada cambiada de −2,5σ a <b>−2,0σ</b> (la anterior estaba dominada) · 7/7 años positivos en dinero · suelo de capital ~8.000&nbsp;$ · paper-trading reiniciado · Proyecto Finanzas Personales · uso informativo, no es asesoramiento financiero</footer>
 </div>
 </body>
 </html>
