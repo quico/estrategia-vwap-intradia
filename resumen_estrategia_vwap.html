@@ -82,13 +82,39 @@
     <p>16 años de datos reales (Databento, 2010–2026). Método honesto: configuración elegida
     <b>solo con 2010–2019</b> y medida en <b>2020–2026 intactos</b>.</p>
     <div class="grid2">
-      <div class="kpi"><div class="n ok">7/7</div><div class="l">años out-of-sample positivos</div></div>
+      <div class="kpi"><div class="n ok">6/7</div><div class="l">años out-of-sample positivos <span style="font-size:.9em">en dinero</span></div></div>
       <div class="kpi"><div class="n">+0,184R</div><div class="l">expectancy por operación</div></div>
       <div class="kpi"><div class="n">1,15</div><div class="l">profit factor</div></div>
       <div class="kpi"><div class="n">1,27</div><div class="l">Sharpe diario <span style="font-size:.9em">(comisión real 0,52&nbsp;$/lado)</span></div></div>
     </div>
     <p class="muted" style="margin:.7rem 0 0; font-size:.88rem">1.911 operaciones out-of-sample · 35% de aciertos · stress-test: aguanta hasta 4 ticks de slippage + comisiones altas sin perder el edge.</p>
-    <p class="muted" style="margin:.5rem 0 0; font-size:.82rem">Cifras <b>reverificadas el 25-jul-2026</b> reejecutando la validación completa: antes se publicaba +0,194R / PF&nbsp;1,16, que era un error de transcripción (las otras tres estrategias candidatas reprodujeron exactas). El veredicto no cambia.</p>
+
+    <p style="margin:1rem 0 .3rem"><b>Año a año, con 1 MNQ:</b></p>
+    <table>
+      <tr><th>Año</th><th>Expectancy</th><th>P&amp;L</th><th>Ops</th></tr>
+      <tr><td>2020</td><td>+0,089 R</td><td class="ok">+1.392 $</td><td>285</td></tr>
+      <tr><td>2021</td><td>+0,194 R</td><td class="ok">+2.484 $</td><td>290</td></tr>
+      <tr><td>2022</td><td>+0,054 R</td><td class="bad">−1.028 $</td><td>359</td></tr>
+      <tr><td>2023</td><td>+0,342 R</td><td class="ok">+3.042 $</td><td>260</td></tr>
+      <tr><td>2024</td><td>+0,163 R</td><td class="ok">+1.460 $</td><td>315</td></tr>
+      <tr><td>2025</td><td>+0,291 R</td><td class="ok">+2.924 $</td><td>289</td></tr>
+      <tr><td>2026</td><td>+0,224 R</td><td class="ok">+1.899 $</td><td>113</td></tr>
+    </table>
+
+    <div class="warn" style="margin-top:.9rem">
+      <b>Corrección importante (26-jul-2026):</b> antes se publicaba aquí "<b>7/7 años positivos</b>".
+      Es cierto <b>en expectancy R</b> —los siete años dan R medio positivo— pero <b>no en dinero</b>:
+      <b>2022 perdió 1.028&nbsp;$</b> con 1 MNQ pese a un R medio de +0,054. Motivo: R normaliza cada
+      operación por su propio riesgo, y en un año de volatilidad alta los perdedores arriesgan más
+      dólares que los ganadores, así que un R medio positivo puede perder dinero. En dinero son
+      <b>6/7</b>. El script de validación puntuaba por expectancy R y de ahí salió el titular.
+    </div>
+    <p class="muted" style="margin:.7rem 0 0; font-size:.82rem">Las cifras de esta sección se
+      <b>reverificaron el 25-jul-2026</b> reejecutando la validación completa (antes se publicaba
+      +0,194R / PF&nbsp;1,16, error de transcripción) y el desglose anual en dinero se añadió el
+      <b>26-jul-2026</b>. El edge sigue siendo real pero es fino: <b>σ&nbsp;=&nbsp;1,68R</b> por operación
+      sobre un edge de 0,184R, así que harían falta <b>~323 operaciones</b> para distinguirlo de cero
+      al 95&nbsp;% de confianza.</p>
   </div>
 
   <div class="card">
@@ -108,7 +134,7 @@
       <tr><td>Win rate</td><td class="ok">47,8 %</td><td>35,0 %</td></tr>
       <tr><td>Expectancy por operación</td><td class="ok">+0,61 R</td><td>+0,184 R</td></tr>
       <tr><td>Profit factor</td><td class="ok">2,04</td><td>1,15</td></tr>
-      <tr><td>Drawdown máximo</td><td>−390 $</td><td>−4.580 $</td></tr>
+      <tr><td>Drawdown máximo</td><td>−390 $</td><td>−4.507 $ <span class="muted">(−41,98 R)</span></td></tr>
     </table>
 
     <p style="margin:.9rem 0 .3rem"><b>Qué funciona ya:</b></p>
@@ -123,7 +149,7 @@
       <ul style="margin:.5rem 0 0">
         <li><b>23 operaciones no validan nada.</b> El backtest necesitó 1.911 para afirmar algo. Ir mejor que la expectativa con esta muestra es suerte, no confirmación.</li>
         <li><b>Una sola operación aporta el 37 % del beneficio</b> (+655&nbsp;$ el 17-jun). Sin ella quedan +1.111&nbsp;$ y la expectancy cae de +0,61R a <b>+0,34R</b>.</li>
-        <li><b>El mal tramo aún no ha llegado:</b> −390&nbsp;$ de bajón frente a los −4.580&nbsp;$ que da el histórico. El sistema no ha sido puesto a prueba de verdad.</li>
+        <li><b>El mal tramo aún no ha llegado:</b> −390&nbsp;$ de bajón frente a los −4.507&nbsp;$ que da el histórico —y frente a los ~−6.300&nbsp;$ que costaría ese mismo bajón al riesgo por operación de hoy (ver abajo). El sistema no ha sido puesto a prueba de verdad.</li>
         <li><b>Sí se ha visto el patrón de riesgo:</b> el 15-jul encadenó <b>3 stops seguidos</b> antes de acertar el cuarto. En un día de caída sostenida, una estrategia de reversión solo-largos come stops en cadena.</li>
       </ul>
     </div>
@@ -174,11 +200,11 @@
     <h2><span class="ico">🗺️</span>En qué fase estamos</h2>
     <table>
       <tr><th>Fase</th><th>Estado</th></tr>
-      <tr><td>Validar el edge histórico (7/7 años)</td><td class="ok">✅ hecho</td></tr>
+      <tr><td>Validar el edge histórico (6/7 años en dinero)</td><td class="ok">✅ hecho</td></tr>
       <tr><td>Robustez a costes / slippage</td><td class="ok">✅ hecho</td></tr>
       <tr><td>Paper-trading en vivo</td><td class="wait">🔄 en marcha · 6 semanas, 23 ops</td></tr>
       <tr><td>Confirmar fill-realism (¿se llenan las órdenes?)</td><td class="wait">⏳ solo el papel lo dirá</td></tr>
-      <tr><td>Fondear cuenta y pasar a real (~8–15k$)</td><td class="wait">⏳ pendiente</td></tr>
+      <tr><td>Fondear cuenta y pasar a real (<b>12–15k$</b>, revisado al alza)</td><td class="wait">⏳ pendiente</td></tr>
       <tr><td>Auto-ejecución vía IBKR (paper 7497 primero)</td><td class="wait">⏳ fase final</td></tr>
     </table>
   </div>
@@ -189,7 +215,13 @@
       <ul style="margin:0">
         <li><b>Edge fino:</b> profit factor 1,15. Real pero modesto — no te hará rico rápido.</li>
         <li><b>Win rate ~35%:</b> aciertas 1 de cada 3 veces; ganas porque los aciertos son mayores que los fallos. Duro psicológicamente (por eso es automático).</li>
-        <li><b>Drawdowns:</b> con 1 MNQ el peor bajón histórico fue <b>−4.580&nbsp;$</b>; por eso conviene un suelo ~8.000&nbsp;$, ideal 12–15k.</li>
+        <li><b>Drawdowns, y el suelo de capital recalculado:</b> con 1 MNQ el peor bajón histórico fue
+          <b>−4.507&nbsp;$</b>, que en unidades de riesgo son <b>−41,98&nbsp;R</b>. Pero el riesgo por
+          operación en dólares se ha <b>duplicado</b> con el Nasdaq en 29.000: 50–74&nbsp;$/op en
+          2021-2024 del backtest, 117&nbsp;$ en 2026 y <b>151&nbsp;$ en el paper actual</b>. Ese mismo
+          bajón de −42&nbsp;R al riesgo de hoy son <b>≈ −6.300&nbsp;$</b>. Sobre una cuenta de 8.000&nbsp;$
+          eso es un −79&nbsp;%, así que <b>el suelo realista ya no son 8.000&nbsp;$ sino 12–15k$</b> — y no
+          se puede bajar el tamaño, porque 1&nbsp;MNQ ya es el mínimo negociable.</li>
         <li><b>Lo que el backtest no sabe:</b> si tus órdenes se llenan de verdad en vivo. Eso es lo que el paper-trading mide ahora.</li>
       </ul>
     </div>
@@ -201,7 +233,7 @@
     TWS abierto y observar, sin arriesgar dinero, hasta que el papel confirme que funciona en vivo.
   </div>
 
-  <footer>Generado el 2026-06-13 · actualizado 2026-07-25 (cifras de validación reverificadas) · Proyecto Finanzas Personales · uso informativo, no es asesoramiento financiero</footer>
+  <footer>Generado el 2026-06-13 · actualizado 2026-07-26 (desglose anual en dinero: 6/7 años, no 7/7 · suelo de capital revisado a 12–15k$) · Proyecto Finanzas Personales · uso informativo, no es asesoramiento financiero</footer>
 </div>
 </body>
 </html>
