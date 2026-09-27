@@ -47,9 +47,29 @@
 <body>
 <div class="wrap">
 
-  <span class="pill">PAPER-TRADING REINICIADO EL 26-JUL-2026 · sin dinero real</span>
+  <span class="pill" style="background:rgba(231,76,60,.15); color:var(--red); border-color:rgba(231,76,60,.45)">⛔ INVALIDADA EL 27-SEP-2026</span>
   <h1>Estrategia de trading intradía</h1>
   <p class="sub">VWAP-reversion sobre micro-futuro del Nasdaq (MNQ)</p>
+
+  <div class="card" style="border:1px solid var(--red); background:rgba(231,76,60,.08)">
+    <h2><span class="ico">⛔</span>Esta estrategia no tiene edge ejecutable</h2>
+    <p>El backtest detectaba el stop <b>al cierre</b> de la vela de 5 minutos, pero anotaba la salida
+    <b>en el nivel del stop</b>. Eso no se puede ejecutar: si solo miras el cierre, cuando lo ves el precio
+    ya está por debajo del nivel; y una orden stop real en el servidor salta con la <b>mecha</b>, aunque la
+    vela luego se recupere.</p>
+    <p>Medida con fills ejecutables, en el mismo tramo out-of-sample 2020-2026 y con 1 MNQ:</p>
+    <table>
+      <tr><th>Cómo se ejecuta el stop</th><th>P&amp;L OOS</th><th>Profit factor</th></tr>
+      <tr><td>Backtest original (fill imposible)</td><td>+25.816 $</td><td>1,23</td></tr>
+      <tr><td>Detectado al cierre, salida al cierre</td><td class="bad">−17.532 $</td><td>0,89</td></tr>
+      <tr><td>Orden stop en el servidor</td><td class="bad">−14.098 $</td><td>0,91</td></tr>
+    </table>
+    <p>Pierde en los 7 años OOS con cualquier modelo ejecutable, y ampliar el stop no lo arregla. El
+    paper-trading usaba el mismo fill; recalculado con el cierre real, los stops salen a −1,6R de media,
+    no a −1R.</p>
+    <p class="muted">Todo lo que sigue se conserva como histórico. Sus cifras de edge, drawdown y
+    capital <b>no son válidas</b>.</p>
+  </div>
 
   <div class="card">
     <h2><span class="ico">🎯</span>Qué es y cómo funciona</h2>
